@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchanga Shudhi & Tarabala</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h2>PANCHANGA SHUDHI & TARABALA</h2>
+    <h3><center>Upload Panchanga Excel File</center></h3>
+    <div class="input-container">
+        <input type="file" id="fileInput" accept=".xlsx, .xls">
+        <label for="fromDate">From Date:</label>
+        <input type="text" id="fromDate" placeholder="dd/mm/yyyy">
+        <label for="toDate">To Date:</label>
+        <input type="text" id="toDate" placeholder="dd/mm/yyyy">
+        <button id="filterButton">Filter</button>
+        <button id="shudhiButton">Shudhi</button>
+    </div>
+    <div class="dropdown-container">
+        <label for="person1">Person 1 Nakshatra:</label>
+        <select id="person1"></select>
+        <label for="person2">Person 2 Nakshatra:</label>
+        <select id="person2"></select>
+        <button id="tarabalaButton">Tarabala</button>
+    </div>
+    <table id="panchangaTable" style="width: 100%;"></table>
+    <script src="script.js"></script>
+    <script src="asta.js"></script>
+    <script src="tarabala.js"></script>
+</body>
+</html>
