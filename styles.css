@@ -45,6 +45,13 @@ table {
     margin: 20px 0;
 }
 
+table th {
+    position: sticky;
+    top: 0;
+    background-color: #f1f1f1;
+    z-index: 1;
+}
+
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
