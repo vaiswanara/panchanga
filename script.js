@@ -1,3 +1,5 @@
+let headerIndexMap = {};
+
 document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -13,7 +15,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         
         // Map column names to their indexes in the file
         const headerRow = jsonData[0];
-        const headerIndexMap = {};
+        headerIndexMap = {};
         requiredColumns.forEach(col => {
             const index = headerRow.indexOf(col);
             if (index !== -1) headerIndexMap[col] = index;
@@ -66,7 +68,7 @@ function highlightAuspiciousCells(auspiciousValues) {
     const table = document.getElementById('panchangaTable');
     const rows = table.getElementsByTagName('tr');
     const headerRow = rows[0];
-    const headerIndexMap = {};
+    headerIndexMap = {};
     for (let i = 0; i < headerRow.cells.length; i++) {
         headerIndexMap[headerRow.cells[i].textContent] = i;
     }
@@ -176,3 +178,51 @@ function filterTable() {
         }
     }
 }
+
+// Add SHOW/HIDE button after tarabala button
+const tarabalaButton = document.getElementById('tarabalaButton');
+const showHideButton = document.createElement('button');
+showHideButton.id = 'showHideButton';
+showHideButton.textContent = 'SHOW/HIDE';
+tarabalaButton.insertAdjacentElement('afterend', showHideButton);
+
+let showOnlyHighlighted = false;
+
+showHideButton.addEventListener('click', function() {
+    const fromDateInput = document.getElementById('fromDate').value.split('/').reverse().join('-'); // Convert dd/mm/yyyy to yyyy-mm-dd
+    const toDateInput = document.getElementById('toDate').value.split('/').reverse().join('-'); // Convert dd/mm/yyyy to yyyy-mm-dd
+    const fromDate = new Date(fromDateInput);
+    const toDate = new Date(toDateInput);
+
+    const table = document.getElementById('panchangaTable');
+    const rows = table.getElementsByTagName('tr');
+    for (let i = 1; i < rows.length; i++) { // Skip header row
+        const cells = rows[i].getElementsByTagName('td');
+        const gregorianDateCell = cells[0];
+        const person1TaraCell = cells[headerIndexMap["Person1_tara"]];
+        const person2TaraCell = cells[headerIndexMap["Person2_tara"]];
+        const lunarMonthCell = cells[headerIndexMap["LunarMonth"]];
+        const asthaCell = cells[headerIndexMap["ASTHA"]];
+        const date = new Date(gregorianDateCell.textContent.split('/').reverse().join('-')); // Convert dd/mm/yyyy to yyyy-mm-dd
+
+        if (showOnlyHighlighted) {
+            if (date >= fromDate && date <= toDate) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        } else {
+            if (gregorianDateCell.classList.contains('green') &&
+                person1TaraCell.classList.contains('green') &&
+                person2TaraCell.classList.contains('green') &&
+                lunarMonthCell.classList.contains('green') &&
+                (asthaCell.textContent === "-" || asthaCell.textContent.trim() === "") &&
+                date >= fromDate && date <= toDate) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+    showOnlyHighlighted = !showOnlyHighlighted;
+});
